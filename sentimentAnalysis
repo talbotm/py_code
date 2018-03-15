@@ -1,0 +1,20 @@
+# simple sentiment analysis code on given words
+
+import tweepy
+from textblob import TextBlob
+
+
+# FIND CREDENTIALS HERE: https://apps.twitter.com/app/9246159/keys
+consumer_key = 	!!!
+consumer_secret = !!!
+access_token = !!!
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+api = tweepy.API(auth)
+public_tweets = api.search('Hitman Sniper')
+
+for tweet in public_tweets:
+    print(tweet.text)
+    analysis = TextBlob(tweet.text)
+    print(analysis.sentiment)
+
