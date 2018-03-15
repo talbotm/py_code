@@ -1,0 +1,52 @@
+# Python 3.0
+# Connection to DDNA
+
+import pandas as pd
+import datetime
+import psycopg2
+  
+da_host = 'data.deltadna.net'
+da_name = 'square-enix-montreal.sniper'
+da_user = # ADD USER ID IN HERE #
+da_pwd = # ADD PASSWORD IN HERE #
+
+da_conn = psycopg2.connect(host = da_host, database = da_name, user = da_user, password = da_pwd)
+
+
+def query1():
+    return 
+    '''
+    SELECT
+        s__UID,
+        DATEDIFF('dd', gaUserStartDate, MAX( eventDate )) nbDays,
+        COUNT( DISTINCT sessionID ) sessions,
+        COUNT( CASE WHEN eventName = 'transaction' AND revenueValidated = 1 THEN transactionName END ) PurchasedItems,
+        SUM( CASE WHEN eventName = 'transaction' AND revenueValidated = 1 THEN convertedProductAmount END )/ 100.0::FLOAT Spending,
+        COUNT( DISTINCT s_GunID ) UnlockedGuns,
+        COUNT( DISTINCT i16_GunMasteryLevel ) MasteryLevel,
+        COUNT(DISTINCT CASE WHEN i16_progressionID > 0 THEN i16_progressionID END) montenegro_missions,
+        COUNT(CASE WHEN i16_progressionID > 0 THEN i16_progressionID END) montenegro_missions_attempts,
+        MAX(CASE WHEN i16_progressionID > 0 THEN i16_progressionID END) montenegro_max_mission,
+        SUM(CASE WHEN i16_progressionID < 0 THEN 1 ELSE 0 END) zombie_attempts,
+        SUM(CASE WHEN eventName = 'everyplay' AND s_action = 'Upload' THEN 1 ELSE 0 END) everyplay_upload,
+        SUM(CASE WHEN eventName = 'everyplay' AND s_action = 'WatchedFriend' THEN 1 ELSE 0 END) everyplay_watchFriend,
+        SUM(CASE WHEN eventName = 'everyplay' AND s_action = 'WatchedTierced' THEN 1 ELSE 0 END) everyplay_watchTierced
+    FROM
+        events_live
+    WHERE
+        s__UID = '22964714'
+    GROUP BY 
+        s__UID, gaUserStartDate
+    '''
+
+
+print("started")
+try:
+                results = pd.read_sql_query(query1(), da_conn)
+                print(results)
+except Exception as e:
+                print(e)
+                da_conn.close()
+print("done") 
+ 
+ 
