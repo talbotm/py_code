@@ -1,0 +1,4 @@
+
+# Conda environments
+source activate ComputerVision
+source activate base
